@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>答题练习</title>
+	<link rel="stylesheet" href="./vant/index.css" />
+	<style>
+		* {
+
+			padding: 0;
+			margin: 0;
+			box-sizing: border-box;
+		}
+
+		html,
+		body,
+		#app,
+		.container,
+		.question-card {
+			width: 100%;
+			height: 100%;
+		}
+
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+			background-color: #f7f8fa;
+		}
+
+		.container {
+			max-width: 600px;
+			margin: 0 auto;
+		}
+
+		.question-card {
+			position: relative;
+			padding: 0 12px;
+			border-radius: 8px;
+			overflow: hidden;
+			box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+		}
+
+		.question-title {
+			font-size: 16px;
+			font-weight: bold;
+			margin-bottom: 16px;
+			line-height: 1.5;
+		}
+
+		.option-item {
+			margin-bottom: 12px;
+			border-radius: 4px;
+			overflow: hidden;
+		}
+
+		.action-bar {
+			display: flex;
+			justify-content: flex-end;
+			margin-top: 20px;
+		}
+
+		.progress {
+			text-align: center;
+			margin-bottom: 16px;
+			color: #969799;
+			font-size: 14px;
+		}
+
+		.result-message {
+			margin-top: 12px;
+			margin-bottom: 12px;
+			padding: 12px;
+			border-radius: 4px;
+		}
+
+		.correct {
+			background-color: #f0f9eb;
+			color: #67c23a;
+		}
+
+		.wrong {
+			background-color: #fef0f0;
+			color: #222;
+		}
+
+		.answer-info {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 8px;
+			font-size: 14px;
+		}
+
+		.van-button--small {
+			padding: 0px 24px;
+		}
+
+		.van-button--default {
+			border: 1px solid #000;
+		}
+
+		.van-button--block {
+			width: 90%;
+			margin: 0 auto;
+		}
+
+		.bottom-buttons .van-button--default {
+			border-color: #fff;
+			padding: 0 8px;
+		}
+
+		.bottom-buttons .van-icon.van-icon-star.van-button__icon {
+			color: #ffd21e;
+		}
+
+		/* 题目列表样式 */
+
+		.question-number {
+			width: 30px;
+			height: 30px;
+			line-height: 30px;
+			border-radius: 50%;
+			background-color: #fff;
+			border: 1px solid #CCCCCC;
+			cursor: pointer;
+			margin: 4px auto;
+			text-align: center;
+			font-size: 14px;
+			transition: all 0.3s;
+		}
+
+		.question-number.correct {
+			background-color: #1989fa;
+			border-color: #1989fa;
+			color: white;
+		}
+
+		.question-number.wrong {
+			background-color: #ffbcbc;
+			/* border-color: #ffbcbc; */
+			color: #222;
+		}
+
+		.question-number.current {
+			background-color: #b4b4b4;
+			border-color: #b4b4b4;
+			color: white;
+		}
+
+		.question-grid {
+			display: grid;
+			grid-template-columns: repeat(9, 1fr);
+			gap: 4px;
+			padding: 0 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<div class="container">
+			<!-- <div class="progress">
+        
+      </div> -->
+
+			<van-panel class="question-card">
+
+				<template #header>
+					<div style="text-align: center;margin: 10px;font-weight: bold;">
+						{{ currentIndex + 1 }}/{{ questions.length }}
+						<van-icon v-if="isCollected" name="star" color="#ffd21e" @click="toggleCollect"
+							style="margin-left: 8px;" />
+						<van-icon v-else name="star-o" @click="toggleCollect" style="margin-left: 8px;" />
+					</div>
+				</template>
+
+				<div class="question-title"><van-tag type="primary"
+						size="medium">{{currentQuestion.typeName}}</van-tag>&nbsp;{{
+					currentQuestion.title }}</div>
+
+				<div v-if="currentQuestion.type === 2 || currentQuestion.type === 1">
+					<!-- 单选题 -->
+					<van-radio-group v-model="userAnswer" v-if="currentQuestion.type === 1" @change="submitAnswer">
+						<div class="option-item" v-for="option in currentQuestion.optionData" :key="option.optionNo">
+							<van-radio :name="option.optionNo">
+								{{ option.optionNo }}. {{ option.optionContent }}
+							</van-radio>
+						</div>
+					</van-radio-group>
+					<!-- 多选题 -->
+					<van-checkbox-group v-model="userAnswers" v-else>
+						<div class="option-item" v-for="option in currentQuestion.optionData" :key="option.optionNo">
+							<van-checkbox :name="option.optionNo">
+								{{ option.optionNo }}. {{ option.optionContent }}
+							</van-checkbox>
+						</div>
+					</van-checkbox-group>
+				</div>
+				<!-- 判断题 -->
+				<div v-else>
+					<van-radio-group v-model="userAnswer" @change="submitAnswer">
+						<div class="option-item">
+							<van-radio name="T">正确</van-radio>
+						</div>
+						<div class="option-item">
+							<van-radio name="F">错误</van-radio>
+						</div>
+					</van-radio-group>
+				</div>
+
+				<div v-if="showResult" :class="['result-message', isCorrect ? 'correct' : 'wrong']">
+					{{ isCorrect ? '回答正确！' : '回答错误！' }}
+					<div class="answer-info" v-if="!isCorrect">
+						<div>正确答案: {{ correctAnswerDisplay }}</div>
+						<div>你的答案: {{ userAnswerDisplay }}</div>
+					</div>
+				</div>
+
+				<van-button type="info" size="small" block round v-show="currentQuestion.type === 2"
+					@click="submitAnswer" :disabled="isSubmitted">
+					确定
+				</van-button>
+
+
+
+				<div style="position: absolute; bottom: 0; left: 0; width: 100%;">
+
+					<div class="action-bar" style="padding: 0 12px;">
+						<van-button type="default" size="small" round style="margin-right: 30px;" @click="prevQuestion"
+							:disabled="currentIndex === 0">
+							上一题
+						</van-button>
+
+						<van-button type="default" size="small" round @click="nextQuestion"
+							:disabled="currentIndex === questions.length - 1">
+							下一题
+						</van-button>
+					</div>
+
+					<!-- 底部按钮区域 -->
+					<div class="bottom-buttons"
+						style="display: flex; justify-content: space-between;border-top: #E6E6E6 solid 1px; margin-top: 12px;">
+						<van-button round type="default" size="normal" @click="toggleCollect"
+							:icon="isCollected ? 'star' : 'star-o'">
+							{{ isCollected ? '已收藏' : '收藏本题' }}
+						</van-button>
+
+						<van-button round type="default" size="normal" icon="bars" @click="showQuestionList = true">
+							题目列表
+						</van-button>
+					</div>
+
+					<!-- <van-button round type="primary" size="small" @click="toggleCollect" :icon="isCollected ? 'star' : 'star-o'">
+            {{ isCollected ? '已收藏' : '收藏本题' }}
+          </van-button> -->
+				</div>
+
+			</van-panel>
+
+			<!-- 题目列表弹出框 -->
+			<van-popup v-model="showQuestionList" position="bottom" :style="{ height: '70%' }">
+				<div class="question-list">
+					<h3 style="text-align: center; margin: 8px 0;">{{ currentIndex + 1 }}/{{ questions.length }}</h3>
+					<div class="question-grid">
+						<div v-for="(question, index) in questions" :key="question.id" :class="[
+					'question-number',
+					isQuestionAnswered(index),
+					index === currentIndex ? 'current' : ''
+				  ]" @click="jumpToQuestion(index)">
+							{{ index + 1 }}
+						</div>
+					</div>
+				</div>
+			</van-popup>
+		</div>
+	</div>
+
+	<script src="./vant/vue.min.js"></script>
+	<script src="./vant/vant.min.js"></script>
+	<script src="./questions.js"></script>
+	<script>
+		Vue.use(vant);
+
+		new Vue({
+			el: '#app',
+			data() {
+				return {
+					questions: questions,
+					currentIndex: 0,
+					userAnswer: '',
+					userAnswers: [],
+					showResult: false,
+					isCorrect: false,
+					isSubmitted: false,
+					collectedQuestions: JSON.parse(localStorage.getItem('collectedQuestions') || '[]'),
+					showQuestionList: false,
+					userAnswersMap: JSON.parse(localStorage.getItem('userAnswers') || '{}')
+				};
+			},
+			computed: {
+				currentQuestion() {
+					return this.questions[this.currentIndex];
+				},
+				isCollected() {
+					return this.collectedQuestions.includes(this.currentQuestion.id);
+				},
+				userAnswerDisplay() {
+					if (this.currentQuestion.type === 2) {
+						return this.userAnswers.sort().join(', ');
+					}
+					return this.userAnswer;
+				},
+				correctAnswerDisplay() {
+					if (this.currentQuestion.type === 3) {
+						return this.currentQuestion.answer === 'T' ? '正确' : '错误';
+					}
+					return this.currentQuestion.answer;
+				}
+			},
+			watch: {
+				currentIndex(newVal, oldVal) {
+					localStorage.setItem('currentIndex', newVal);
+					this.resetQuestionState();
+					this.loadUserAnswer();
+				}
+			},
+			created() {
+				this.loadUserAnswer();
+			},
+			methods: {
+				submitAnswer() {
+					if ((this.currentQuestion.type === 2 && this.userAnswers.length === 0) ||
+						((this.currentQuestion.type === 1 || this.currentQuestion.type === 3) && !this.userAnswer)) {
+						this.$toast('请选择一个答案');
+						return;
+					}
+
+					this.checkAnswer();
+				},
+				checkAnswer() {
+					this.isSubmitted = true;
+					this.showResult = true;
+
+					if (this.currentQuestion.type === 2) {
+						const correctAnswers = this.currentQuestion.answer.split(',');
+						this.isCorrect = correctAnswers.length === this.userAnswers.length &&
+							correctAnswers.every(answer => this.userAnswers.includes(answer));
+					} else {
+						this.isCorrect = this.userAnswer === this.currentQuestion.answer;
+					}
+
+					this.saveUserAnswer();
+				},
+				prevQuestion() {
+					if (this.currentIndex > 0) {
+						this.currentIndex--;
+					}
+				},
+				nextQuestion() {
+					if (this.currentIndex < this.questions.length - 1) {
+						this.currentIndex++;
+					}
+				},
+				resetQuestionState() {
+					this.userAnswer = '';
+					this.userAnswers = [];
+					this.showResult = false;
+					this.isCorrect = false;
+					this.isSubmitted = false;
+				},
+				toggleCollect() {
+					const index = this.collectedQuestions.indexOf(this.currentQuestion.id);
+					if (index === -1) {
+						this.collectedQuestions.push(this.currentQuestion.id);
+					} else {
+						this.collectedQuestions.splice(index, 1);
+					}
+					localStorage.setItem('collectedQuestions', JSON.stringify(this.collectedQuestions));
+				},
+				saveUserAnswer2() {
+					const answers = JSON.parse(localStorage.getItem('userAnswers') || '{}');
+					if (this.currentQuestion.type === 2) {
+						answers[this.currentQuestion.id] = this.userAnswers;
+					} else {
+						answers[this.currentQuestion.id] = this.userAnswer;
+					}
+					localStorage.setItem('userAnswers', JSON.stringify(answers));
+				},
+				loadUserAnswer2() {
+					const answers = JSON.parse(localStorage.getItem('userAnswers') || '{}');
+					const savedAnswer = answers[this.currentQuestion.id];
+
+					if (savedAnswer) {
+						if (this.currentQuestion.type === 2) {
+							this.userAnswers = savedAnswer;
+						} else {
+							this.userAnswer = savedAnswer;
+						}
+						this.isSubmitted = true;
+						this.showResult = true;
+
+						if (this.currentQuestion.type === 2) {
+							const correctAnswers = this.currentQuestion.answer.split(',');
+							this.isCorrect = correctAnswers.length === this.userAnswers.length &&
+								correctAnswers.every(answer => this.userAnswers.includes(answer));
+						} else {
+							this.isCorrect = this.userAnswer === this.currentQuestion.answer;
+						}
+					} else {
+						this.resetQuestionState();
+					}
+				},
+				saveUserAnswer() {
+					if (this.currentQuestion.type === 2) {
+						this.userAnswersMap[this.currentQuestion.id] = this.userAnswers;
+					} else {
+						this.userAnswersMap[this.currentQuestion.id] = this.userAnswer;
+					}
+					localStorage.setItem('userAnswers', JSON.stringify(this.userAnswersMap));
+				},
+				loadUserAnswer() {
+					const savedAnswer = this.userAnswersMap[this.currentQuestion.id];
+
+					if (savedAnswer) {
+						if (this.currentQuestion.type === 2) {
+							this.userAnswers = savedAnswer;
+						} else {
+							this.userAnswer = savedAnswer;
+						}
+						this.isSubmitted = true;
+						this.checkAnswer();
+					} else {
+						this.resetQuestionState();
+					}
+
+					this.currentIndex = +(localStorage.getItem('currentIndex')) || 0;
+				},
+				jumpToQuestion(index) {
+					this.currentIndex = index;
+					this.showQuestionList = false;
+				},
+				isQuestionAnswered2(index) {
+					const questionId = this.questions[index].id;
+					return this.userAnswersMap.hasOwnProperty(questionId);
+				},
+				isQuestionAnswered(index) {
+					const questionId = this.questions[index].id;
+					if (!this.userAnswersMap.hasOwnProperty(questionId)) {
+
+						return '';
+					}
+
+					const answer = this.userAnswersMap[questionId];
+					const correctAnswer = this.questions[index].answer;
+
+
+					if (this.questions[index].type === 2) {
+						const userAnswers = Array.isArray(answer) ? answer : [answer];
+						const correctAnswers = correctAnswer.split(',');
+						const isCorrect = correctAnswers.length === userAnswers.length &&
+							correctAnswers.every(a => userAnswers.includes(a));
+						return isCorrect ? 'correct' : 'wrong';
+					} else {
+						return answer[0] === correctAnswer ? 'correct' : 'wrong';
+					}
+				}
+			}
+		});
+	</script>
+</body>
+
+</html>
