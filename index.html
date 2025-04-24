@@ -192,26 +192,26 @@
 						size="medium">{{currentQuestion.typeName}}</van-tag>&nbsp;{{
 					currentQuestion.title }}</div>
 
-				<div v-if="currentQuestion.type === 2 || currentQuestion.type === 1">
-					<!-- 单选题 -->
-					<van-radio-group v-model="userAnswer" v-if="currentQuestion.type === 1" @change="submitAnswer">
-						<div class="option-item" v-for="option in currentQuestion.optionData" :key="option.optionNo">
-							<van-radio :name="option.optionNo">
-								{{ option.optionNo }}. {{ option.optionContent }}
-							</van-radio>
-						</div>
-					</van-radio-group>
-					<!-- 多选题 -->
-					<van-checkbox-group v-model="userAnswers" v-else>
-						<div class="option-item" v-for="option in currentQuestion.optionData" :key="option.optionNo">
-							<van-checkbox :name="option.optionNo">
-								{{ option.optionNo }}. {{ option.optionContent }}
-							</van-checkbox>
-						</div>
-					</van-checkbox-group>
-				</div>
+				<!-- <div v-if="currentQuestion.type === 2 || currentQuestion.type === 1"> -->
+				<!-- 单选题 -->
+				<van-radio-group v-model="userAnswer" v-if="currentQuestion.type === 1 || currentQuestion.type === 3" @change="submitAnswer">
+					<div class="option-item" v-for="option in currentQuestion.optionData" :key="option.optionNo">
+						<van-radio :name="option.optionNo">
+							{{ option.optionNo }}. {{ option.optionContent }}
+						</van-radio>
+					</div>
+				</van-radio-group>
+				<!-- 多选题 -->
+				<van-checkbox-group v-model="userAnswers" v-else>
+					<div class="option-item" v-for="option in currentQuestion.optionData" :key="option.optionNo">
+						<van-checkbox :name="option.optionNo">
+							{{ option.optionNo }}. {{ option.optionContent }}
+						</van-checkbox>
+					</div>
+				</van-checkbox-group>
+				<!-- </div> -->
 				<!-- 判断题 -->
-				<div v-else>
+				<!-- <div v-else>
 					<van-radio-group v-model="userAnswer" @change="submitAnswer">
 						<div class="option-item">
 							<van-radio name="T">正确</van-radio>
@@ -220,7 +220,7 @@
 							<van-radio name="F">错误</van-radio>
 						</div>
 					</van-radio-group>
-				</div>
+				</div> -->
 
 				<div v-if="showResult" :class="['result-message', isCorrect ? 'correct' : 'wrong']">
 					{{ isCorrect ? '回答正确！' : '回答错误！' }}
@@ -291,7 +291,7 @@
 
 	<script src="./vant/vue.min.js"></script>
 	<script src="./vant/vant.min.js"></script>
-	<script src="./questions.js?ver=1.1"></script>
+	<script src="./questions.js?ver=1.2"></script>
 	<script>
 		Vue.use(vant);
 
@@ -322,15 +322,15 @@
 					if (this.currentQuestion.type === 2) {
 						return this.userAnswers.sort().join(', ');
 					}
-					if (this.currentQuestion.type === 3) {
-						return this.userAnswers === "T" ? "正确" : "错误";
-					}
+					// if (this.currentQuestion.type === 3) {
+					// 	return this.userAnswers === "T" ? "正确" : "错误";
+					// }
 					return this.userAnswer;
 				},
 				correctAnswerDisplay() {
-					if (this.currentQuestion.type === 3) {
-						return this.currentQuestion.answer === 'T' ? '正确' : '错误';
-					}
+					// if (this.currentQuestion.type === 3) {
+					// 	return this.currentQuestion.answer === 'T' ? '正确' : '错误';
+					// }
 					return this.currentQuestion.answer;
 				}
 			},
