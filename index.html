@@ -8,8 +8,9 @@
 	<link rel="stylesheet" href="./vant/index.css" />
 	<style>
 		[v-cloak] {
-            display: none;
-        }
+			display: none;
+		}
+
 		* {
 
 			padding: 0;
@@ -85,8 +86,12 @@
 		}
 
 		.wrong {
-			background-color: #fef0f0;
-			color: #222;
+			/* background-color: #fef0f0;
+			color: #222; */
+
+			background-color: #fff1f0;
+			border: 1px solid #ff4d4f;
+			color: #ff4d4f;
 		}
 
 		.answer-info {
@@ -107,6 +112,8 @@
 		.van-button--block {
 			width: 90%;
 			margin: 0 auto;
+			height: 40px;
+			font-size: 16px;
 		}
 
 		.bottom-buttons .van-button--default {
@@ -158,8 +165,9 @@
 			gap: 4px;
 			padding: 0 10px;
 		}
+
 		.van-radio__icon,
-		.van-radio__label{
+		.van-radio__label {
 			line-height: 26px;
 		}
 	</style>
@@ -287,7 +295,7 @@
 	<script>
 		Vue.use(vant);
 
-		var vm= new Vue({
+		var vm = new Vue({
 			el: '#app',
 			data() {
 				return {
@@ -348,7 +356,7 @@
 						return;
 					}
 
-					if(this.userAnswer){
+					if (this.userAnswer || this.userAnswers.length) {
 						this.checkAnswer();
 					}
 				},
@@ -382,7 +390,7 @@
 					this.showResult = false;
 					this.isCorrect = false;
 					this.isSubmitted = false;
-					
+
 				},
 				toggleCollect() {
 					const index = this.collectedQuestions.indexOf(this.currentQuestion.id);
@@ -481,7 +489,7 @@
 				}
 			}
 		});
-					
+
 	</script>
 </body>
 
