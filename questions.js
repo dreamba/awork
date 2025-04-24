@@ -1522,7 +1522,7 @@ let questions = [
     },
     {
       "id": "5796781965194250",
-      "title": "<p>体能训练能改善血液循环，促使骨骼生长。</p>",
+      "title": "体能训练能改善血液循环，促使骨骼生长。",
       "type": 3,
       "typeName": "判断题",
       "basicType": 3,
@@ -1907,7 +1907,7 @@ let questions = [
     },
     {
       "id": "5796781965194294",
-      "title": "<p>当众指正婴幼儿吮吸手指的行为，有助于婴幼儿改掉不良的行为习惯。</p>",
+      "title": "当众指正婴幼儿吮吸手指的行为，有助于婴幼儿改掉不良的行为习惯。",
       "type": 3,
       "typeName": "判断题",
       "basicType": 3,
@@ -2116,7 +2116,7 @@ let questions = [
     },
     {
       "id": "5796781965194321",
-      "title": "<p>\"指认&ldquo;这个过程，既能使婴幼儿认识更多的东西，又能训练婴幼儿将&rdquo;听声音&ldquo;与&rdquo;看物品&ldquo;这两个动作统一起来，有助于识记。</p>",
+      "title": "\"指认&ldquo;这个过程，既能使婴幼儿认识更多的东西，又能训练婴幼儿将&rdquo;听声音&ldquo;与&rdquo;看物品&ldquo;这两个动作统一起来，有助于识记。",
       "type": 3,
       "typeName": "判断题",
       "basicType": 3,
@@ -3537,7 +3537,7 @@ let questions = [
           "addImg": false,
           "imgUrl": "",
           "optionNo": "D",
-          "optionContent": "<p>饮食行为不健康</p>"
+          "optionContent": "饮食行为不健康"
         }
       ]
     },
@@ -5855,7 +5855,7 @@ let questions = [
     },
     {
       "id": "5796781974631466",
-      "title": "<p>婴幼儿入园带来的贵重物品、玩具、图书、零食等，应由（ ）先暂时保管，放在固定的位置，待其回家时归还。</p>",
+      "title": "婴幼儿入园带来的贵重物品、玩具、图书、零食等，应由（ ）先暂时保管，放在固定的位置，待其回家时归还。",
       "type": 1,
       "typeName": "单选题",
       "basicType": 1,
@@ -6211,7 +6211,7 @@ let questions = [
     },
     {
       "id": "5796781974631481",
-      "title": "<p>危险物品应放在（ ）。</p>",
+      "title": "危险物品应放在（ ）。",
       "type": 1,
       "typeName": "单选题",
       "basicType": 1,
@@ -6567,7 +6567,7 @@ let questions = [
     },
     {
       "id": "5796781974631493",
-      "title": "<p>托幼、福利机构常见传染病猩红热一般潜伏期为2至5天外，以下（ ）传染病的潜伏期一般天数差不多。</p>",
+      "title": "托幼、福利机构常见传染病猩红热一般潜伏期为2至5天外，以下（ ）传染病的潜伏期一般天数差不多。",
       "type": 1,
       "typeName": "单选题",
       "basicType": 1,
@@ -8975,7 +8975,7 @@ let questions = [
     },
     {
       "id": "5796781974762500",
-      "title": "<p>语言是在( )的过程中逐渐发展起来的。</p>",
+      "title": "语言是在( )的过程中逐渐发展起来的。",
       "type": 1,
       "typeName": "单选题",
       "basicType": 1,
@@ -8987,31 +8987,31 @@ let questions = [
           "addImg": false,
           "imgUrl": "",
           "optionNo": "A",
-          "optionContent": "<p>使用</p>"
+          "optionContent": "使用"
         },
         {
           "addImg": false,
           "imgUrl": "",
           "optionNo": "B",
-          "optionContent": "<p>学习</p>"
+          "optionContent": "学习"
         },
         {
           "addImg": false,
           "imgUrl": "",
           "optionNo": "C",
-          "optionContent": "<p>模仿</p>"
+          "optionContent": "模仿"
         },
         {
           "addImg": false,
           "imgUrl": "",
           "optionNo": "D",
-          "optionContent": "<p>练习</p>"
+          "optionContent": "练习"
         }
       ]
     },
     {
       "id": "5796781974762501",
-      "title": "<p>《幼儿园教育指导纲要》语言领域的内容与要求之一是( )。</p>",
+      "title": "《幼儿园教育指导纲要》语言领域的内容与要求之一是( )。",
       "type": 1,
       "typeName": "单选题",
       "basicType": 1,
@@ -9023,7 +9023,7 @@ let questions = [
           "addImg": false,
           "imgUrl": "",
           "optionNo": "A",
-          "optionContent": "<p>提供普通话的语言环境，帮助幼儿熟悉、听懂并学说普通话</p>"
+          "optionContent": "提供普通话的语言环境，帮助幼儿熟悉、听懂并学说普通话"
         },
         {
           "addImg": false,
@@ -9041,7 +9041,7 @@ let questions = [
           "addImg": false,
           "imgUrl": "",
           "optionNo": "D",
-          "optionContent": "<p>对文字符号的兴趣</p>"
+          "optionContent": "对文字符号的兴趣"
         }
       ]
     },

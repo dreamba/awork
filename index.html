@@ -7,6 +7,9 @@
 	<title>答题练习</title>
 	<link rel="stylesheet" href="./vant/index.css" />
 	<style>
+		[v-cloak] {
+            display: none;
+        }
 		* {
 
 			padding: 0;
@@ -159,11 +162,8 @@
 </head>
 
 <body>
-	<div id="app">
+	<div id="app" v-cloak>
 		<div class="container">
-			<!-- <div class="progress">
-        
-      </div> -->
 
 			<van-panel class="question-card">
 
@@ -279,11 +279,11 @@
 
 	<script src="./vant/vue.min.js"></script>
 	<script src="./vant/vant.min.js"></script>
-	<script src="./questions.js"></script>
+	<script src="./questions.js?ver=1.1"></script>
 	<script>
 		Vue.use(vant);
 
-		new Vue({
+		var vm= new Vue({
 			el: '#app',
 			data() {
 				return {
@@ -310,6 +310,9 @@
 					if (this.currentQuestion.type === 2) {
 						return this.userAnswers.sort().join(', ');
 					}
+					if (this.currentQuestion.type === 3) {
+						return this.userAnswers === "T" ? "正确" : "错误";
+					}
 					return this.userAnswer;
 				},
 				correctAnswerDisplay() {
@@ -331,13 +334,19 @@
 			},
 			methods: {
 				submitAnswer() {
-					if ((this.currentQuestion.type === 2 && this.userAnswers.length === 0) ||
-						((this.currentQuestion.type === 1 || this.currentQuestion.type === 3) && !this.userAnswer)) {
+					// if ((this.currentQuestion.type === 2 && this.userAnswers.length === 0) ||
+					// 	((this.currentQuestion.type === 1 || this.currentQuestion.type === 3) && !this.userAnswer)) {
+					// 	this.$toast('请选择一个答案');
+					// 	return;
+					// }
+					if (this.currentQuestion.type === 2 && this.userAnswers.length === 0) {
 						this.$toast('请选择一个答案');
 						return;
 					}
 
-					this.checkAnswer();
+					if(this.userAnswer){
+						this.checkAnswer();
+					}
 				},
 				checkAnswer() {
 					this.isSubmitted = true;
@@ -369,6 +378,7 @@
 					this.showResult = false;
 					this.isCorrect = false;
 					this.isSubmitted = false;
+					
 				},
 				toggleCollect() {
 					const index = this.collectedQuestions.indexOf(this.currentQuestion.id);
@@ -422,7 +432,6 @@
 				},
 				loadUserAnswer() {
 					const savedAnswer = this.userAnswersMap[this.currentQuestion.id];
-
 					if (savedAnswer) {
 						if (this.currentQuestion.type === 2) {
 							this.userAnswers = savedAnswer;
@@ -468,6 +477,7 @@
 				}
 			}
 		});
+					
 	</script>
 </body>
 
