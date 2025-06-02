@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>全国物业费下调数据(移动端)</title>
+    <title>全国物业费下调数据</title>
     <style>
         * {
             box-sizing: border-box;
@@ -85,7 +85,6 @@
             }
         }
     </style>
-    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -209,61 +208,6 @@
         </tr>
     </table>
 </div>
-
-<script>
-function exportToExcel() {
-    /* 创建工作簿 */
-    const wb = XLSX.utils.book_new();
-    
-    /* 创建合并后的数据 */
-    const allData = [];
-    
-    // 添加标题行
-    allData.push(["全国物业费下调数据汇总(2024-2025)"]);
-    allData.push([]); // 空行
-    
-    // 添加第一个表格数据
-    allData.push(["=== 物业费下调案例 ==="]);
-    const table1 = document.getElementById('feeReduction');
-    const data1 = XLSX.utils.table_to_sheet(table1);
-    allData.push(...XLSX.utils.sheet_to_json(data1, {header:1}));
-    allData.push([]); // 空行
-    
-    // 添加第二个表格数据
-    allData.push(["=== 空置房优惠政策 ==="]);
-    const table2 = document.getElementById('vacancyPolicy');
-    const data2 = XLSX.utils.table_to_sheet(table2);
-    allData.push(...XLSX.utils.sheet_to_json(data2, {header:1}));
-    allData.push([]); // 空行
-    
-    // 添加第三个表格数据
-    allData.push(["=== 媒体报道 ==="]);
-    const table3 = document.getElementById('media');
-    const data3 = XLSX.utils.table_to_sheet(table3);
-    allData.push(...XLSX.utils.sheet_to_json(data3, {header:1}));
-    
-    // 将合并后的数据转换为工作表
-    const ws = XLSX.utils.aoa_to_sheet(allData);
-    
-    // 设置列宽
-    ws['!cols'] = [
-        {wch: 15}, // 城市/媒体列
-        {wch: 25}, // 小区/标题列
-        {wch: 12}, // 原物业费/政策列
-        {wch: 12}, // 现物业费/时间列
-        {wch: 10}  // 降幅列
-    ];
-    
-    // 添加工作表到工作簿
-    XLSX.utils.book_append_sheet(wb, ws, "物业费数据");
-    
-    /* 导出Excel */
-    XLSX.writeFile(wb, '物业费下调数据汇总.xlsx');
-    
-    /* 移动端提示 */
-    alert('Excel文件已生成，包含所有数据在一个工作表中');
-}
-</script>
 
 </body>
 </html>
